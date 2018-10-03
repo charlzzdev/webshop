@@ -43,14 +43,8 @@ class AddItems extends Component{
             return(
                   <div className="AddItems" >
                         <form onSubmit={this.submitItem}>
-                              <div>
-                                    <label htmlFor="name">Name: </label>
-                                    <input type="text" id="name" onChange={this.setItemData} />
-                              </div>
-                              <div>
-                                    <label htmlFor="desc">Description: </label>      
-                                    <input type="text" id="desc" onChange={this.setItemData} />
-                              </div>
+                              <input type="text" id="name" onChange={this.setItemData} placeholder="Name" />
+                              <input type="text" id="desc" onChange={this.setItemData} placeholder="Description"/>
                               <button onClick={this.submitItem}>Submit</button>
                         </form>
                   </div>

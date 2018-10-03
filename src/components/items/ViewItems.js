@@ -69,17 +69,19 @@ class ViewItems extends Component{
       render(){
             return(
                   <div className="ViewItems">
-                        {
-                              this.state.items.map(item => {
-                                    return(
-                                          <div id="item-card" key={item.id}>
-                                                <h1 id="item-name">{item.name}</h1>
-                                                <h3 id="item-desc">{item.desc}</h3>
-                                                <input type="checkbox" onChange={this.checked} id={item.id} />
-                                          </div> 
-                                    )
-                              })
-                        }
+                        <div className="item-list">
+                              {
+                                    this.state.items.map(item => {
+                                          return(
+                                                <div id="item-card" key={item.id}>
+                                                      <h1 id="item-name">{item.name}</h1>
+                                                      <h3 id="item-desc">{item.desc}</h3>
+                                                      <input type="checkbox" onChange={this.checked} id={item.id} />
+                                                </div> 
+                                          )
+                                    })
+                              }
+                        </div>
                         <Order inBasket={this.state.inBasket} />
                   </div>
             )

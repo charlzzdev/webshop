@@ -1,5 +1,92 @@
-body {
+* {
       margin: 0;
       padding: 0;
       font-family: sans-serif;
+      box-sizing: border-box;
+}
+
+a {
+      text-decoration: none;
+      color: #007bba;
+}
+
+
+
+.Header {
+      background: #eee;
+}
+
+.Header ul{
+      padding: 1rem 2rem;
+      margin: 0;
+      list-style-type: none;
+      display: flex;
+      justify-content: flex-end;
+}
+
+.Header ul li{
+      padding: 0 0.6rem;
+}
+
+
+
+.ViewItems .item-list {
+      background: #108cb2;
+      display: flex;
+      flex-wrap: wrap;
+}
+
+.ViewItems #item-card {
+      background:rgba(0,0,0,0.2);
+      width: 25%;
+      padding: 5%;
+}
+
+.ViewItems #item-card:nth-child(even) {
+      background:rgba(0,0,0,0.3);
+}
+
+.ViewItems #item-card:hover{
+      background: rgba(255,255,255,0.05);
+      transition: background 150ms;
+}
+
+.Order {
+      width: 100%;
+      padding: 2rem 1rem;
+}
+
+.Order input, .Order button{
+      padding: 0.3rem;
+      background: #00bbff;
+      border: 0;
+      border-radius: 1px;
+      margin: 0rem 0.5rem;
+}
+
+.Order button, .AddItems button {
+      cursor: pointer;
+}
+
+.AddItems {
+      background: #007bba;
+      display: flex;
+      justify-content: center;
+}
+
+.AddItems input, .AddItems button {
+      padding: 0.3rem;
+      margin: 0.6rem 0;
+      border: 0;
+      width: 100%;
+}
+
+
+
+/* Mobile */
+@media(max-width: 700px){
+      *{
+            flex-direction: column;
+            width: 100% !important;
+      }
 }

@@ -20,7 +20,9 @@ class Order extends Component {
                   }
             });
 
-            firebase.firestore().collection('orders').doc(this.state.name).set(items);
+            if(this.state.name !== ''){
+                  firebase.firestore().collection('orders').doc(this.state.name).set(items);
+            }
       }
 
       nameChanged = (e) => {
@@ -31,7 +33,8 @@ class Order extends Component {
 
       render(){
             return(
-                  <div>
+                  <div className="Order">
+                        <span>{this.props.inBasket.length} items are in the basket.</span>
                         <input type="text" placeholder="name" onChange={this.nameChanged} />
                         <input type="text" placeholder="address" onChange={this.nameChanged} />
                         <button onClick={this.orderClicked}>Click to order</button>
