@@ -21,7 +21,7 @@ class AddItems extends Component{
             e.preventDefault();
             
             let item = this.state.item;
-            if(item.name !== '' && item.desc !== ''){
+            if(item.name !== '' && item.desc !== '' && item.img !== ''){
                   firebase.firestore().collection('items').add({
                         name: this.state.item.name,
                         desc: this.state.item.desc
@@ -39,12 +39,21 @@ class AddItems extends Component{
             });
       }
 
+      setItemImage = (e) => {
+            if(this.state.item.name !== ''){
+                  Object.entries(e.target.files).forEach(file => {
+                        firebase.storage().ref('/itemImages/' + this.state.item.name + '/' + file[1].name).put(file[1]);
+                  });
+            }
+      }
+
       render(){
             return(
                   <div className="AddItems" >
                         <form onSubmit={this.submitItem}>
                               <input type="text" id="name" onChange={this.setItemData} placeholder="Name" />
                               <input type="text" id="desc" onChange={this.setItemData} placeholder="Description"/>
+                              <input type="file" id="img" onChange={this.setItemImage} multiple/>
                               <button onClick={this.submitItem}>Submit</button>
                         </form>
                   </div>
