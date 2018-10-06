@@ -14,7 +14,8 @@ class ViewItems extends Component{
 
       componentDidMount(){
             const db = firebase.firestore();
-            
+            const storage = firebase.storage();
+
             db.settings({
                   timestampsInSnapshots: true
             });
@@ -22,6 +23,7 @@ class ViewItems extends Component{
             db.collection('items').get().then((snapshot) => {
                   snapshot.docs.forEach(doc => {
                         let currentState = this.state.items;
+
                         this.setState({
                               items: [
                                     ...currentState,
@@ -31,6 +33,13 @@ class ViewItems extends Component{
                                           desc: doc.data().desc
                                     }
                               ]
+                        });
+
+                        storage.ref().child('/itemImages/' + doc.data().name + '/image0.jpg').getDownloadURL().then(url => {
+                              let itemImage = document.getElementById(doc.data().name);
+                              itemImage.src = url;
+                        }).catch(err => {
+                              console.log(err);
                         });
                   });
             });
@@ -76,6 +85,9 @@ class ViewItems extends Component{
                                                 <div id="item-card" key={item.id}>
                                                       <h1 id="item-name">{item.name}</h1>
                                                       <h3 id="item-desc">{item.desc}</h3>
+                                                      <div>
+                                                            <img src="" id={item.name} alt=""/>
+                                                      </div>
                                                       <input type="checkbox" onChange={this.checked} id={item.id} />
                                                 </div> 
                                           )

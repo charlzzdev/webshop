@@ -42,6 +42,10 @@ a {
       padding: 5%;
 }
 
+.ViewItems #item-card img {
+      width: 10rem;
+}
+
 .ViewItems #item-card:nth-child(even) {
       background:rgba(0,0,0,0.3);
 }

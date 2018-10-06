@@ -21,7 +21,7 @@ class AddItems extends Component{
             e.preventDefault();
             
             let item = this.state.item;
-            if(item.name !== '' && item.desc !== '' && item.img !== ''){
+            if(item.name !== '' && item.desc !== ''){
                   firebase.firestore().collection('items').add({
                         name: this.state.item.name,
                         desc: this.state.item.desc
@@ -42,7 +42,9 @@ class AddItems extends Component{
       setItemImage = (e) => {
             if(this.state.item.name !== ''){
                   Object.entries(e.target.files).forEach(file => {
-                        firebase.storage().ref('/itemImages/' + this.state.item.name + '/' + file[1].name).put(file[1]);
+                        for(let i = 0; i < e.target.files.length; i++){
+                              firebase.storage().ref('/itemImages/' + this.state.item.name + '/image' + i + '.jpg').put(file[1]);
+                        }
                   });
             }
       }
