@@ -6,6 +6,9 @@ class AddItems extends Component{
             item: {
                   name: '',
                   desc: ''
+            },
+            user: {
+                  email: ''
             }
       }
 
@@ -15,18 +18,34 @@ class AddItems extends Component{
             db.settings({
                   timestampsInSnapshots: true
             });
+
+            firebase.auth().onAuthStateChanged(user => {
+                  if(user){
+                        this.setState({
+                              user: {
+                                    email: user.email
+                              }
+                        });
+                  } else {
+                        this.props.history.push('/');
+                  }
+            });
       }
 
       submitItem = (e) => {
             e.preventDefault();
             
-            let item = this.state.item;
-            if(item.name !== '' && item.desc !== ''){
-                  firebase.firestore().collection('items').add({
-                        name: this.state.item.name,
-                        desc: this.state.item.desc
-                  });
-            }
+            firebase.auth().onAuthStateChanged(user => {
+                  if(user){
+                        let item = this.state.item;
+                        if(item.name !== '' && item.desc !== ''){
+                              firebase.firestore().collection('items').add({
+                                    name: this.state.item.name,
+                                    desc: this.state.item.desc
+                              });
+                        }
+                  }
+            });
       }
 
       setItemData = (e) => {
@@ -40,24 +59,36 @@ class AddItems extends Component{
       }
 
       setItemImage = (e) => {
-            if(this.state.item.name !== ''){
-                  Object.entries(e.target.files).forEach(file => {
-                        for(let i = 0; i < e.target.files.length; i++){
-                              firebase.storage().ref('/itemImages/' + this.state.item.name + '/image' + i + '.jpg').put(file[1]);
+            let files = e.target.files;
+
+            firebase.auth().onAuthStateChanged(user => {
+                  if(user){
+                        if(this.state.item.name !== ''){
+                              Object.entries(files).forEach(file => {
+                                    for(let i = 0; i < files.length; i++){
+                                          firebase.storage().ref('/itemImages/' + this.state.item.name + '/image' + i + '.jpg').put(file[1]);
+                                    }
+                              });
                         }
-                  });
-            }
+                  }
+            });
       }
 
       render(){
             return(
                   <div className="AddItems" >
-                        <form onSubmit={this.submitItem}>
-                              <input type="text" id="name" onChange={this.setItemData} placeholder="Name" />
-                              <input type="text" id="desc" onChange={this.setItemData} placeholder="Description"/>
-                              <input type="file" id="img" onChange={this.setItemImage} multiple/>
-                              <button onClick={this.submitItem}>Submit</button>
-                        </form>
+                        {
+                              this.state.user.email !== '' ? (
+                                    <form onSubmit={this.submitItem}>
+                                          <input type="text" id="name" onChange={this.setItemData} placeholder="Name" />
+                                          <input type="text" id="desc" onChange={this.setItemData} placeholder="Description"/>
+                                          <input type="file" id="img" onChange={this.setItemImage} multiple/>
+                                          <button onClick={this.submitItem}>Submit</button>
+                                    </form>
+                              ) : (
+                                    <h1>You're not authenticated.</h1>
+                              )
+                        }
                   </div>
             )
       }
