@@ -10,7 +10,7 @@ class AddItems extends Component{
             user: {
                   email: ''
             }
-      }
+      };
 
       componentDidMount(){
             const db = firebase.firestore();
@@ -41,7 +41,8 @@ class AddItems extends Component{
                         if(item.name !== '' && item.desc !== ''){
                               firebase.firestore().collection('items').add({
                                     name: this.state.item.name,
-                                    desc: this.state.item.desc
+                                    desc: this.state.item.desc,
+                                    addedBy: user.email
                               });
                         }
                   }

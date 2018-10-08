@@ -6,13 +6,14 @@ import AddItems from './components/items/AddItems';
 import ViewItems from './components/items/ViewItems';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import ManageOrders from './components/order/ManageOrders';
 
 class App extends Component {
       state = {
             user: {
                   email: ''
             }
-      }
+      };
 
       constructor(){
             super();
@@ -54,6 +55,7 @@ class App extends Component {
                               <Route exact path="/" component={ViewItems}/>
                               <Route path="/login" component={Login} />
                               <Route path="/register" component={Register} />
+                              <Route path="/manage" component={ManageOrders}/>
                         </div>
                   </BrowserRouter>
             );

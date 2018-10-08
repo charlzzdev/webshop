@@ -10,7 +10,7 @@ class ViewItems extends Component{
             inBasket: [
 
             ]
-      }
+      };
 
       componentDidMount(){
             const db = firebase.firestore();
@@ -30,7 +30,8 @@ class ViewItems extends Component{
                                     {
                                           id: doc.id,
                                           name: doc.data().name,
-                                          desc: doc.data().desc
+                                          desc: doc.data().desc,
+                                          addedBy: doc.data().addedBy
                                     }
                               ]
                         });
@@ -52,7 +53,8 @@ class ViewItems extends Component{
                         checkedItem = {
                               id: item.id,
                               name: item.name,
-                              desc: item.desc
+                              desc: item.desc,
+                              addedBy: item.addedBy
                         }
                   }
             });
@@ -88,6 +90,7 @@ class ViewItems extends Component{
                                                       <div>
                                                             <img src="" id={item.name} alt=""/>
                                                       </div>
+                                                      <h5>Added by: {item.addedBy}</h5>
                                                       <input type="checkbox" onChange={this.checked} id={item.id} />
                                                 </div> 
                                           )

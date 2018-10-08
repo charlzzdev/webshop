@@ -18,7 +18,7 @@ const Register = () => {
       }
 
       return(
-            <div className="Register">
+            <div className="Register container">
                   <h1>Register</h1>
                   <form onSubmit={register} >
                         <input type="email" placeholder="E-mail" id="registerEmailInput"/>

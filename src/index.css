@@ -10,6 +10,15 @@ a {
       color: #007bba;
 }
 
+.container {
+      margin: 0 auto;
+      text-align: center;
+}
+
+ul{
+      list-style-type: none;
+}
+
 
 
 .Header {
@@ -19,7 +28,6 @@ a {
 .Header ul{
       padding: 1rem 2rem;
       margin: 0;
-      list-style-type: none;
       display: flex;
       justify-content: flex-end;
 }
@@ -85,8 +93,11 @@ a {
       width: 100%;
 }
 
-.Register, .Login{
-      text-align: center;
+.ManageOrders .order-details{
+      background: rgba(0, 0, 0, 0.02);
+      width: 30rem;
+      padding: 2rem;
+      margin: 1rem auto;
 }
 
 

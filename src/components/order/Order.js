@@ -7,7 +7,9 @@ class Order extends Component {
             address: ''
       };
 
-      orderClicked = () => {
+      orderSubmit = (e) => {
+            e.preventDefault();
+
             let items = {
                   name: this.state.name,
                   address: this.state.address,
@@ -21,11 +23,11 @@ class Order extends Component {
             });
 
             if(this.state.name !== ''){
-                  firebase.firestore().collection('orders').doc(this.state.name).set(items);
+                  firebase.firestore().collection('orders').doc().set(items);
             }
       }
 
-      nameChanged = (e) => {
+      orderInputChanged = (e) => {
             this.setState({
                   [e.target.placeholder]: e.target.value
             });
@@ -33,12 +35,12 @@ class Order extends Component {
 
       render(){
             return(
-                  <div className="Order">
+                  <form onSubmit={this.orderSubmit} className="Order">
                         <span>{this.props.inBasket.length} items are in the basket.</span>
-                        <input type="text" placeholder="name" onChange={this.nameChanged} />
-                        <input type="text" placeholder="address" onChange={this.nameChanged} />
-                        <button onClick={this.orderClicked}>Click to order</button>
-                  </div>
+                        <input type="text" placeholder="name" onChange={this.orderInputChanged} />
+                        <input type="text" placeholder="address" onChange={this.orderInputChanged} />
+                        <button onClick={this.orderSubmit}>Click to order</button>
+                  </form>
             )
       }
 }

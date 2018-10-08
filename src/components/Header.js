@@ -17,6 +17,7 @@ const Header = (props) => {
                         props.user.email !== '' ? (
                               <ul>
                                     <li><Link to="/add">Add items</Link></li>
+                                    <li><Link to="/manage">Manage orders</Link></li>
                                     <li><Link to="/">View items</Link></li>
                                     <li><Link to="/" onClick={logout}>Logout</Link></li>
                               </ul>
