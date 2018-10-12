@@ -11,19 +11,38 @@ class ManageOrders extends Component{
                   timestampsInSnapshots: true
             });
 
-            firebase.firestore().collection('orders').get().then(snapshot => {
-                  snapshot.docs.forEach(doc => {
-                        this.setState({
-                              people: [
-                                    ...this.state.people,
-                                    {
-                                          name: doc.data().name,
-                                          address: doc.data().address,
-                                          orders: doc.data().orders
-                                    }
-                              ]
+            firebase.auth().onAuthStateChanged(user => {
+                  if(user){
+                        firebase.firestore().collection('orders').get().then(snapshot => {
+                              snapshot.docs.forEach(doc => {
+                                    let orders = [];
+      
+                                    doc.data().orders.forEach(order => {
+                                          if(order.addedBy === user.email){
+                                                orders = [
+                                                      ...orders,
+                                                      order
+                                                ]
+                                          }
+                                    });
+      
+                                    this.setState({
+                                          people: [
+                                                ...this.state.people,
+                                                {
+                                                      name: doc.data().name,
+                                                      address: doc.data().address,
+                                                      orders
+                                                }
+                                          ]
+                                    });
+                              });
                         });
-                  });
+                  } else {
+                        this.setState({
+                              people: []
+                        });
+                  }
             });
       }
 
@@ -32,24 +51,30 @@ class ManageOrders extends Component{
                   <div className="ManageOrders container">
                         <h1>Manage orders</h1>
                         {
-                              this.state.people.map(person => {
-                                    return(
-                                          <div key={person.address} className="order-details" >
-                                                <h2>Name: {person.name}</h2>
-                                                <h3>Address: {person.address}</h3>
-                                                <h3>Ordered items:</h3>
-                                                <ul>
-                                                      {
-                                                            Object.entries(person.orders).map(order => {
-                                                                  return(
-                                                                        <li key={order[0]}>{order[1].name}</li>
-                                                                  )
-                                                            })
-                                                      }
-                                                </ul>
-                                          </div>
-                                    )
-                              })
+                              this.state.people.length !== 0 ? (
+                                    this.state.people.map(person => {
+                                          return(
+                                                person.orders.length !== 0 ? (
+                                                      <div key={person.address} className="order-details" >
+                                                            <h2>Name: {person.name}</h2>
+                                                            <h3>Address: {person.address}</h3>
+                                                            <h3>Ordered items:</h3>
+                                                            <ul>
+                                                                  {
+                                                                        person.orders.map(order => {
+                                                                              return(
+                                                                                    <li key={order.id}>{order.name}</li>
+                                                                              )
+                                                                        })
+                                                                  }
+                                                            </ul>
+                                                      </div>
+                                                ) : (null)
+                                          )
+                                    })
+                              ) : (
+                                    <h1>You're not authenticated.</h1>
+                              )
                         }
                   </div>
             )

@@ -10,21 +10,20 @@ class Order extends Component {
       orderSubmit = (e) => {
             e.preventDefault();
 
-            let items = {
+            let person = {
                   name: this.state.name,
                   address: this.state.address,
-                  orders: {}
+                  orders: []
             };
-            this.props.inBasket.forEach(item => {
-                  items.orders = {
-                        ...items.orders,
-                        [item.id]: item
-                  }
-            });
 
-            if(this.state.name !== ''){
-                  firebase.firestore().collection('orders').doc().set(items);
-            }
+            this.props.inBasket.forEach(item => {
+                  person.orders = [
+                        ...person.orders,
+                        item
+                  ]
+            });
+            
+            firebase.firestore().collection('orders').doc(person.address).set(person);            
       }
 
       orderInputChanged = (e) => {
