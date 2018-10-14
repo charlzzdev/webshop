@@ -21,13 +21,17 @@ class AddItems extends Component{
 
             firebase.auth().onAuthStateChanged(user => {
                   if(user){
-                        this.setState({
-                              user: {
-                                    email: user.email
-                              }
-                        });
+                        if(this.isUnmounted === false){
+                              this.setState({
+                                    user: {
+                                          email: user.email
+                                    }
+                              });
+                        }
                   } else {
-                        this.props.history.push('/');
+                        if(this.isUnmounted === false){
+                              this.props.history.push('/');
+                        }
                   }
             });
       }
@@ -45,8 +49,16 @@ class AddItems extends Component{
                                     addedBy: user.email
                               });
                         }
+                        this.setState({
+                              item: {
+                                    name: '',
+                                    desc: ''
+                              }
+                        });
                   }
             });
+
+            
       }
 
       setItemData = (e) => {
@@ -75,14 +87,22 @@ class AddItems extends Component{
             });
       }
 
+      componentWillUnmount(){
+            this.isUnmounted = true;
+      }
+
+      componentWillMount(){
+            this.isUnmounted = false;
+      }
+
       render(){
             return(
                   <div className="AddItems" >
                         {
                               this.state.user.email !== '' ? (
                                     <form onSubmit={this.submitItem}>
-                                          <input type="text" id="name" onChange={this.setItemData} placeholder="Name" />
-                                          <input type="text" id="desc" onChange={this.setItemData} placeholder="Description"/>
+                                          <input type="text" id="name" onChange={this.setItemData} value={this.state.item.name} placeholder="Name" />
+                                          <input type="text" id="desc" onChange={this.setItemData} value={this.state.item.desc} placeholder="Description"/>
                                           <input type="file" id="img" onChange={this.setItemImage} multiple/>
                                           <button onClick={this.submitItem}>Submit</button>
                                     </form>

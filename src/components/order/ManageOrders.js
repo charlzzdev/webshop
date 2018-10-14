@@ -13,37 +13,51 @@ class ManageOrders extends Component{
 
             firebase.auth().onAuthStateChanged(user => {
                   if(user){
-                        firebase.firestore().collection('orders').get().then(snapshot => {
-                              snapshot.docs.forEach(doc => {
-                                    let orders = [];
-      
-                                    doc.data().orders.forEach(order => {
-                                          if(order.addedBy === user.email){
-                                                orders = [
-                                                      ...orders,
-                                                      order
-                                                ]
+                        if(this.isUnmounted === false){
+                              firebase.firestore().collection('orders').get().then(snapshot => {
+                                    snapshot.docs.forEach(doc => {
+                                          let orders = [];
+            
+                                          doc.data().orders.forEach(order => {
+                                                if(order.addedBy === user.email){
+                                                      orders = [
+                                                            ...orders,
+                                                            order
+                                                      ]
+                                                }
+                                          });
+            
+                                          if(orders.length > 0){
+                                                this.setState({
+                                                      people: [
+                                                            ...this.state.people,
+                                                            {
+                                                                  name: doc.data().name,
+                                                                  address: doc.data().address,
+                                                                  orders
+                                                            }
+                                                      ]
+                                                });
                                           }
                                     });
-      
-                                    this.setState({
-                                          people: [
-                                                ...this.state.people,
-                                                {
-                                                      name: doc.data().name,
-                                                      address: doc.data().address,
-                                                      orders
-                                                }
-                                          ]
-                                    });
                               });
-                        });
+                        }
                   } else {
-                        this.setState({
-                              people: []
-                        });
+                        if(this.isUnmounted === false){
+                              this.setState({
+                                    people: []
+                              });
+                        }
                   }
             });
+      }
+
+      componentWillUnmount(){
+            this.isUnmounted = true;
+      }
+
+      componentWillMount(){
+            this.isUnmounted = false;
       }
 
       render(){

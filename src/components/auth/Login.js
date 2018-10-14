@@ -7,9 +7,13 @@ const Login = () => {
 
             let email = document.querySelector('#loginEmailInput');
             let password = document.querySelector('#loginPasswordInput');
+            let title = document.querySelector('.Login h1');
+            let form = document.querySelector('.Login form');
 
             firebase.auth().signInWithEmailAndPassword(email.value, password.value).then(() => {
                   console.log('login successful');
+                  title.innerHTML = 'Logged in.';
+                  form.setAttribute('style', 'display: none;');
             }).catch(err => {
                   console.log(err);
             });

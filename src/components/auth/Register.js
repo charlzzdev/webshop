@@ -7,10 +7,14 @@ const Register = () => {
 
             let email = document.querySelector('#registerEmailInput');
             let password = document.querySelector('#registerPasswordInput');
+            let title = document.querySelector('.Register h1');
+            let form = document.querySelector('.Register form');
             
             if(email !== '' && password !== ''){
                   firebase.auth().createUserWithEmailAndPassword(email.value, password.value).then(() => {
                         console.log('register successful');
+                        title.innerHTML = 'Registered.';
+                        form.setAttribute('style', 'display: none;');
                   }).catch(error => {
                         console.log(error);
                   });
