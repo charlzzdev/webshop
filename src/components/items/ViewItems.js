@@ -24,17 +24,19 @@ class ViewItems extends Component{
                   snapshot.docs.forEach(doc => {
                         let currentState = this.state.items;
 
-                        this.setState({
-                              items: [
-                                    ...currentState,
-                                    {
-                                          id: doc.id,
-                                          name: doc.data().name,
-                                          desc: doc.data().desc,
-                                          addedBy: doc.data().addedBy
-                                    }
-                              ]
-                        });
+                        if(this.isUnmounted === false){
+                              this.setState({
+                                    items: [
+                                          ...currentState,
+                                          {
+                                                id: doc.id,
+                                                name: doc.data().name,
+                                                desc: doc.data().desc,
+                                                addedBy: doc.data().addedBy
+                                          }
+                                    ]
+                              });
+                        }
 
                         storage.ref().child('/itemImages/' + doc.data().name + '/image0.jpg').getDownloadURL().then(url => {
                               let itemImage = document.getElementById(doc.data().name);
@@ -75,6 +77,14 @@ class ViewItems extends Component{
                   });
             }
             
+      }
+
+      componentWillUnmount(){
+            this.isUnmounted = true;
+      }
+
+      componentWillMount(){
+            this.isUnmounted = false;
       }
 
       render(){

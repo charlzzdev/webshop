@@ -20,14 +20,12 @@ class AddItems extends Component{
             });
 
             firebase.auth().onAuthStateChanged(user => {
-                  if(user){
-                        if(this.isUnmounted === false){
-                              this.setState({
-                                    user: {
-                                          email: user.email
-                                    }
-                              });
-                        }
+                  if(user && this.isUnmounted === false){
+                        this.setState({
+                              user: {
+                                    email: user.email
+                              }
+                        });
                   } else {
                         if(this.isUnmounted === false){
                               this.props.history.push('/');
@@ -42,6 +40,7 @@ class AddItems extends Component{
             firebase.auth().onAuthStateChanged(user => {
                   if(user){
                         let item = this.state.item;
+
                         if(item.name !== '' && item.desc !== ''){
                               firebase.firestore().collection('items').add({
                                     name: this.state.item.name,
@@ -49,6 +48,7 @@ class AddItems extends Component{
                                     addedBy: user.email
                               });
                         }
+
                         this.setState({
                               item: {
                                     name: '',
@@ -63,6 +63,7 @@ class AddItems extends Component{
 
       setItemData = (e) => {
             let currentState = this.state.item;
+
             this.setState({
                   item: {
                         ...currentState,
