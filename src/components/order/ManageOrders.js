@@ -3,6 +3,7 @@ import firebase from 'firebase';
 
 class ManageOrders extends Component{
       state = {
+            user: '',
             people: []
       };
 
@@ -12,7 +13,11 @@ class ManageOrders extends Component{
             });
 
             firebase.auth().onAuthStateChanged(user => {
-                  if(user){
+                  if(user && this.isUnmounted === false){
+                        this.setState({
+                              user: user.email
+                        });
+
                         firebase.firestore().collection('orders').get().then(snapshot => {
                               snapshot.docs.forEach(doc => {
                                     let orders = [];
@@ -37,6 +42,10 @@ class ManageOrders extends Component{
                                                       }
                                                 ]
                                           });
+                                    }
+
+                                    if(doc.data().orders.length === 0){
+                                          firebase.firestore().collection('orders').doc(doc.data().address).delete();
                                     }
                               });
                         });
@@ -64,24 +73,22 @@ class ManageOrders extends Component{
             deletedItem.innerHTML = 'Deleted.';
             setInterval(() => deletedItem.remove(), 1000);
             
-            firebase.auth().onAuthStateChanged(user => {
-                  if(user){
-                        firebase.firestore().collection('orders').doc(item).get().then(doc => {
-                              let filterOrdersFromThisUser;
-                              doc.data().orders.forEach(order => {
-                                    if(order.addedBy === user.email){
-                                          filterOrdersFromThisUser = doc.data().orders.filter(orderFromThisUser => orderFromThisUser.addedBy !== order.addedBy);
-                                    }
-                              });
-
-                              let setFirestore =  {
-                                    ...doc.data(),
-                                    orders: filterOrdersFromThisUser
-                              };
-                              firebase.firestore().collection('orders').doc(item).set(setFirestore);
+            if(this.state.user !== ''){
+                  firebase.firestore().collection('orders').doc(item).get().then(doc => {
+                        let filterOrdersFromThisUser;
+                        doc.data().orders.forEach(order => {
+                              if(order.addedBy === this.state.user){
+                                    filterOrdersFromThisUser = doc.data().orders.filter(orderFromThisUser => orderFromThisUser.addedBy !== order.addedBy);
+                              }
                         });
-                  }
-            });
+
+                        let setFirestore =  {
+                              ...doc.data(),
+                              orders: filterOrdersFromThisUser
+                        };
+                        firebase.firestore().collection('orders').doc(item).set(setFirestore);
+                  });
+            }
       }
 
       render(){
